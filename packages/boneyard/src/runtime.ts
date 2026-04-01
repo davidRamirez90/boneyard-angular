@@ -2,7 +2,7 @@
  * Runtime — renders skeleton bones to HTML.
  *
  * Usage:
- *   import { computeLayout, renderBones } from '@0xgf/boneyard'
+ *   import { computeLayout, renderBones } from 'boneyard-js'
  *
  *   const skeleton = computeLayout(myDescriptor, containerWidth)
  *   element.innerHTML = renderBones(skeleton)

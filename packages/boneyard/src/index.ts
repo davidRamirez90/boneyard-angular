@@ -15,7 +15,7 @@ export type { Bone, SkeletonResult, ResponsiveBones, SkeletonDescriptor, Respons
  *
  * @example In a browser console or dev script:
  * ```ts
- * import { snapshotBones } from '@0xgf/boneyard'
+ * import { snapshotBones } from 'boneyard-js'
  * const bones = snapshotBones(document.querySelector('.my-card'))
  * console.log(JSON.stringify(bones, null, 2))
  * // → paste into my-card.bones.json
@@ -39,8 +39,7 @@ export { extractResponsive } from './responsive.js'
 
 /**
  * Compute skeleton bone positions from a descriptor at a given width.
- * Uses @chenglou/pretext for text measurement — no DOM needed.
- * Ideal for SSR or workers where `snapshotBones` isn't available.
+ * No DOM needed — works in SSR, workers, and edge functions.
  */
 export { computeLayout } from './layout.js'
 
@@ -55,7 +54,7 @@ export { renderBones } from './runtime.js'
  *
  *   container.innerHTML = skeleton(element)
  *
- * For React, prefer `<Skeleton>` from '@0xgf/boneyard/react' — it calls
+ * For React, prefer `<Skeleton>` from 'boneyard-js/react' — it calls
  * `snapshotBones()` directly and handles caching automatically.
  */
 export function skeleton(

@@ -27,7 +27,7 @@ const exampleItems = [
 
 const externalLinks = [
   { href: "https://github.com/0xGF/boneyard", label: "GitHub" },
-  { href: "https://www.npmjs.com/package/@0xgf/boneyard", label: "npm" },
+  { href: "https://www.npmjs.com/package/boneyard-js", label: "npm" },
 ];
 
 export function Sidebar() {

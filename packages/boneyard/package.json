@@ -1,6 +1,6 @@
 {
-  "name": "@0xgf/boneyard",
-  "version": "1.0.1",
+  "name": "boneyard-js",
+  "version": "1.0.2",
   "description": "Pixel-perfect skeleton loading screens. Wrap your component in <Skeleton> and boneyard snapshots the real DOM layout — no manual descriptors, no configuration.",
   "type": "module",
   "main": "./dist/index.js",
@@ -20,7 +20,7 @@
     }
   },
   "bin": {
-    "boneyard": "./bin/boneyard.mjs"
+    "boneyard": "bin/cli.js"
   },
   "files": [
     "dist",
@@ -56,11 +56,13 @@
       "optional": true
     }
   },
+  "dependencies": {
+    "playwright": "^1.58.2"
+  },
   "devDependencies": {
     "@types/node": "^22.19.15",
     "@types/react": "^19.0.0",
     "canvas": "^3.2.2",
-    "playwright": "^1.58.2",
     "react": "^19.0.0",
     "typescript": "^5.7.0"
   }

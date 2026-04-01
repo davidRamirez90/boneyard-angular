@@ -111,7 +111,7 @@ export default function OverviewPage() {
   const stars = useGitHubStars();
 
   const handleCopy = () => {
-    navigator.clipboard.writeText("npm install boneyard").then(() => {
+    navigator.clipboard.writeText("npm install boneyard-js").then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     });
@@ -137,7 +137,7 @@ export default function OverviewPage() {
           >
             <span className="flex items-center gap-2 px-3.5">
               <span className="text-[#78716c]">$</span>
-              npm install boneyard
+              npm install boneyard-js
             </span>
             <span className="flex items-center justify-center w-9 h-9 border-l border-white/10 text-[#78716c] group-hover:text-[#a8a29e] transition-colors">
               {copied ? (
@@ -198,8 +198,8 @@ export default function OverviewPage() {
             <div>
               <p className="text-[14px] text-[#1c1917] font-medium mb-2">Wrap your component</p>
               <div className="relative rounded-lg border border-stone-200 bg-[#1a1a1a] p-4 font-mono text-[13px] leading-relaxed">
-                <CopyButton text={`import { Skeleton } from '@0xgf/boneyard/react'\n\n<Skeleton name="blog-card" loading={isLoading}>\n  {data && <BlogCard data={data} />}\n</Skeleton>`} />
-                <pre className="whitespace-pre text-stone-300 m-0"><span className="text-[#c084fc]">import</span>{" { Skeleton } "}<span className="text-[#c084fc]">from</span><span className="text-[#86efac]"> &apos;@0xgf/boneyard/react&apos;</span>{"\n"}{"\n"}<span className="text-stone-500">{"<"}</span><span className="text-[#fde68a]">Skeleton</span><span className="text-[#93c5fd]"> name</span>=<span className="text-[#86efac]">&quot;blog-card&quot;</span><span className="text-[#93c5fd]"> loading</span>={"{isLoading}"}<span className="text-stone-500">{">"}</span>{"\n"}{"  "}{"{data && "}<span className="text-stone-500">{"<"}</span><span className="text-[#fde68a]">BlogCard</span>{" data={data} "}<span className="text-stone-500">{"/>"}</span>{"}"}{"\n"}<span className="text-stone-500">{"</"}</span><span className="text-[#fde68a]">Skeleton</span><span className="text-stone-500">{">"}</span></pre>
+                <CopyButton text={`import { Skeleton } from 'boneyard-js/react'\n\n<Skeleton name="blog-card" loading={isLoading}>\n  {data && <BlogCard data={data} />}\n</Skeleton>`} />
+                <pre className="whitespace-pre text-stone-300 m-0"><span className="text-[#c084fc]">import</span>{" { Skeleton } "}<span className="text-[#c084fc]">from</span><span className="text-[#86efac]"> &apos;boneyard-js/react&apos;</span>{"\n"}{"\n"}<span className="text-stone-500">{"<"}</span><span className="text-[#fde68a]">Skeleton</span><span className="text-[#93c5fd]"> name</span>=<span className="text-[#86efac]">&quot;blog-card&quot;</span><span className="text-[#93c5fd]"> loading</span>={"{isLoading}"}<span className="text-stone-500">{">"}</span>{"\n"}{"  "}{"{data && "}<span className="text-stone-500">{"<"}</span><span className="text-[#fde68a]">BlogCard</span>{" data={data} "}<span className="text-stone-500">{"/>"}</span>{"}"}{"\n"}<span className="text-stone-500">{"</"}</span><span className="text-[#fde68a]">Skeleton</span><span className="text-stone-500">{">"}</span></pre>
               </div>
             </div>
           </div>
@@ -210,7 +210,7 @@ export default function OverviewPage() {
             <div>
               <p className="text-[14px] text-[#1c1917] font-medium mb-2">Run the CLI once to generate bones</p>
               <div className="relative rounded-lg border border-stone-200 bg-[#1a1a1a] p-4 font-mono text-[13px] leading-relaxed">
-                <CopyButton text="npx boneyard build" />
+                <CopyButton text="npx boneyard-js build" />
                 <span className="text-[#a78bfa]">npx</span><span className="text-stone-300"> boneyard build</span>
               </div>
               <p className="text-[13px] text-[#78716c] mt-2">
@@ -237,7 +237,7 @@ export default function OverviewPage() {
 
         <p className="text-[14px] text-[#78716c] mt-4">
           The skeleton is extracted from your <strong className="text-[#1c1917]">real rendered content</strong>.
-          Run <code className="text-[13px] bg-stone-100 px-1 py-0.5 rounded">npx boneyard build</code> once
+          Run <code className="text-[13px] bg-stone-100 px-1 py-0.5 rounded">npx boneyard-js build</code> once
           to generate bones JSON from your live DOM. Import the registry once and every <code className="text-[13px] bg-stone-100 px-1 py-0.5 rounded">&lt;Skeleton&gt;</code> auto-resolves — pixel-perfect, zero layout shift.
         </p>
       </div>

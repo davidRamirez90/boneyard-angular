@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import type { SkeletonDescriptor } from "@0xgf/boneyard";
-import { computeLayout } from "@0xgf/boneyard/layout";
+import { snapshotBones } from "boneyard-js";
+import type { Bone } from "boneyard-js";
 import { BrowserMockup } from "@/components/browser-mockup";
 
 
@@ -52,55 +52,36 @@ function ExampleCard({ showScanOverlay }: { showScanOverlay?: boolean }) {
   );
 }
 
-// ── The descriptor that represents the card ──
-
-const cardDescriptor: SkeletonDescriptor = {
-  display: "flex", flexDirection: "column", gap: 12,
-  children: [
-    { aspectRatio: 1.778, borderRadius: 6 },
-    { text: "Understanding Modern Web Performance", font: "700 15px Inter", lineHeight: 18.75 },
-    { text: "Layout shift occurs when visible elements move during page load.", font: "400 13px Inter", lineHeight: 19 },
-    {
-      display: "flex", alignItems: "center", gap: 8, children: [
-        { width: 24, height: 24, borderRadius: "50%" },
-        { text: "Sarah Chen", font: "500 12px Inter", lineHeight: 18 },
-      ]
-    },
-  ],
-};
-
-// ── Skeleton render using computeLayout ──
+// ── Skeleton extracted from the real ExampleCard ──
 
 function SkeletonCard() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(320);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => { setMounted(true); }, []);
+  const sourceRef = useRef<HTMLDivElement>(null);
+  const [bones, setBones] = useState<{ bones: Bone[]; height: number } | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    const ro = new ResizeObserver((entries) => {
-      for (const entry of entries) setWidth(Math.floor(entry.contentRect.width));
+    if (!sourceRef.current) return;
+    const raf1 = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (!sourceRef.current) return;
+        try {
+          const result = snapshotBones(sourceRef.current, "how-it-works");
+          setBones(result);
+        } catch {}
+      });
     });
-    ro.observe(containerRef.current);
-    return () => ro.disconnect();
+    return () => cancelAnimationFrame(raf1);
   }, []);
 
-  let skeleton: { bones: { x: number; y: number; w: number; h: number; r: number | string }[]; height: number } | null = null;
-  if (mounted) {
-    try {
-      skeleton = computeLayout(cardDescriptor, width, "how-it-works-render");
-    } catch {
-      skeleton = null;
-    }
-  }
-
   return (
-    <div ref={containerRef}>
-      {skeleton && (
-        <div className="relative w-full" style={{ height: skeleton.height }}>
-          {skeleton.bones.map((b, i) => (
+    <div className="relative">
+      {/* Hidden source for extraction */}
+      <div ref={sourceRef} style={bones ? { visibility: "hidden", position: "absolute" } : undefined}>
+        <ExampleCard />
+      </div>
+      {/* Rendered skeleton */}
+      {bones && (
+        <div className="relative w-full" style={{ height: bones.height }}>
+          {bones.bones.map((b: Bone, i: number) => (
             <div
               key={i}
               className="bone absolute"
@@ -181,7 +162,7 @@ export default function HowItWorksPage() {
             <h3 className="text-[15px] font-semibold mb-2">2. Build</h3>
             <p className="text-[14px] text-[#78716c] leading-relaxed mb-3">
               Run{" "}
-              <code className="font-[family-name:var(--font-mono)] text-[13px] bg-[#f5f5f4] px-1.5 py-0.5 rounded">npx boneyard build</code>.
+              <code className="font-[family-name:var(--font-mono)] text-[13px] bg-[#f5f5f4] px-1.5 py-0.5 rounded">npx boneyard-js build</code>.
               This launches a headless browser via Playwright, visits your running app at
               multiple breakpoints, and calls{" "}
               <code className="font-[family-name:var(--font-mono)] text-[13px] bg-[#f5f5f4] px-1.5 py-0.5 rounded">getBoundingClientRect()</code>{" "}
@@ -220,7 +201,7 @@ export default function HowItWorksPage() {
       <div className="border-l-2 border-[#d6d3d1] pl-4 py-1 space-y-2">
         <p className="text-[14px] text-[#78716c]">
           Run{" "}
-          <code className="font-[family-name:var(--font-mono)] text-[13px] bg-[#f5f5f4] px-1.5 py-0.5 rounded">npx boneyard build</code>{" "}
+          <code className="font-[family-name:var(--font-mono)] text-[13px] bg-[#f5f5f4] px-1.5 py-0.5 rounded">npx boneyard-js build</code>{" "}
           to pre-generate bones, then add{" "}
           <code className="font-[family-name:var(--font-mono)] text-[13px] bg-[#f5f5f4] px-1.5 py-0.5 rounded">import &apos;./bones/registry&apos;</code>{" "}
           to your app entry. Every{" "}

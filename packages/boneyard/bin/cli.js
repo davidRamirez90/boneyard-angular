@@ -6,10 +6,10 @@
  * components, and writes responsive bones JSON files to disk.
  *
  * Usage:
- *   npx boneyard build [url] [options]
- *   npx boneyard build                          ← auto-detects your dev server
- *   npx boneyard build http://localhost:5173     ← explicit URL
- *   npx boneyard build http://localhost:3000/blog http://localhost:3000/shop
+ *   npx boneyard-js build [url] [options]
+ *   npx boneyard-js build                          ← auto-detects your dev server
+ *   npx boneyard-js build http://localhost:5173     ← explicit URL
+ *   npx boneyard-js build http://localhost:3000/blog http://localhost:3000/shop
  *
  * Options:
  *   --out <dir>          Where to write .bones.json files (default: auto-detected)
@@ -20,8 +20,9 @@
  *   npm install -D playwright && npx playwright install chromium
  */
 
-import { writeFileSync, mkdirSync, existsSync } from 'fs'
-import { resolve, join } from 'path'
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs'
+import { resolve, join, dirname } from 'path'
+import { fileURLToPath } from 'url'
 import http from 'http'
 import https from 'https'
 
@@ -34,7 +35,7 @@ if (!command || command === '--help' || command === '-h') {
 }
 
 if (command !== 'build') {
-  console.error(`boneyard: unknown command "${command}". Try: npx boneyard build`)
+  console.error(`boneyard: unknown command "${command}". Try: npx boneyard-js build`)
   process.exit(1)
 }
 
@@ -43,7 +44,7 @@ if (command !== 'build') {
 const urls = []
 // Auto-detect: prefer ./src/bones for projects with a src/ directory (Next.js, Vite, etc.)
 let outDir = existsSync(resolve(process.cwd(), 'src')) ? './src/bones' : './bones'
-let breakpoints = [375, 768, 1280]
+let breakpoints = null // null = auto-detect
 let waitMs = 800
 
 for (let i = 1; i < args.length; i++) {
@@ -55,6 +56,57 @@ for (let i = 1; i < args.length; i++) {
     waitMs = Math.max(0, Number(args[++i]) || 800)
   } else if (!args[i].startsWith('--')) {
     urls.push(args[i])
+  }
+}
+
+// ── Auto-detect breakpoints from Tailwind ────────────────────────────────────
+
+/** Tailwind v4 default breakpoints */
+const TAILWIND_DEFAULTS = [640, 768, 1024, 1280, 1536]
+
+async function detectTailwindBreakpoints() {
+  // Check for Tailwind v4 (CSS-based config)
+  const cssConfigPaths = [
+    'src/app/globals.css',
+    'src/globals.css',
+    'app/globals.css',
+    'styles/globals.css',
+    'src/index.css',
+    'index.css',
+  ]
+
+  for (const p of cssConfigPaths) {
+    const full = resolve(process.cwd(), p)
+    if (!existsSync(full)) continue
+    try {
+      const css = readFileSync(full, 'utf-8')
+      if (css.includes('@import "tailwindcss"') || css.includes("@import 'tailwindcss'") || css.includes('@tailwind')) {
+        return TAILWIND_DEFAULTS
+      }
+    } catch {}
+  }
+
+  // Check for tailwind in package.json dependencies
+  try {
+    const pkgPath = resolve(process.cwd(), 'package.json')
+    if (existsSync(pkgPath)) {
+      const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'))
+      const allDeps = { ...pkg.dependencies, ...pkg.devDependencies }
+      if (allDeps['tailwindcss']) return TAILWIND_DEFAULTS
+    }
+  } catch {}
+
+  return null
+}
+
+if (!breakpoints) {
+  const tw = await detectTailwindBreakpoints()
+  if (tw) {
+    // Add mobile (375) as the smallest breakpoint since Tailwind's start at 640
+    breakpoints = [375, ...tw]
+    process.stdout.write(`  boneyard: detected Tailwind — using breakpoints: ${breakpoints.join(', ')}px\n`)
+  } else {
+    breakpoints = [375, 768, 1280]
   }
 }
 
@@ -99,9 +151,9 @@ if (urls.length === 0) {
     console.error(
       '  boneyard: could not find a running dev server.\n\n' +
       '  Start your dev server first, then run:\n' +
-      '    npx boneyard build\n\n' +
+      '    npx boneyard-js build\n\n' +
       '  Or pass your URL explicitly:\n' +
-      '    npx boneyard build http://localhost:3000\n'
+      '    npx boneyard-js build http://localhost:3000\n'
     )
     process.exit(1)
   }
@@ -130,7 +182,23 @@ console.log(`  URLs:        ${urls.join(', ')}`)
 console.log(`  Breakpoints: ${breakpoints.join(', ')}px`)
 console.log(`  Output:      ${outDir}\n`)
 
-const browser = await chromium.launch()
+let browser
+try {
+  browser = await chromium.launch()
+} catch (e) {
+  if (e.message.includes("Executable doesn't exist")) {
+    console.log('  boneyard: installing chromium...\n')
+    const { execSync } = await import('child_process')
+    const { createRequire } = await import('module')
+    const require = createRequire(import.meta.url)
+    const pwPath = dirname(require.resolve('playwright/package.json'))
+    const playwrightCli = join(pwPath, 'cli.js')
+    execSync(`node "${playwrightCli}" install chromium`, { stdio: 'inherit' })
+    browser = await chromium.launch()
+  } else {
+    throw e
+  }
+}
 const page = await browser.newPage()
 
 // Set build mode flag before any page loads so <Skeleton fixture={...}> renders mock content
@@ -230,8 +298,8 @@ for (const [name, data] of Object.entries(collected)) {
 // ── Generate registry.js ─────────────────────────────────────────────────────
 const names = Object.keys(collected)
 const registryLines = [
-  '// Auto-generated by `npx boneyard build` — do not edit',
-  "import { registerBones } from '@0xgf/boneyard/react'",
+  '// Auto-generated by `npx boneyard-js build` — do not edit',
+  "import { registerBones } from 'boneyard-js/react'",
   '',
 ]
 for (const name of names) {
@@ -282,9 +350,9 @@ function printHelp() {
     --wait <ms>          Extra wait after page load   (default: 800)
 
   Examples:
-    npx boneyard build
-    npx boneyard build http://localhost:5173
-    npx boneyard build --breakpoints 390,820,1440 --out ./public/bones
+    npx boneyard-js build
+    npx boneyard-js build http://localhost:5173
+    npx boneyard-js build --breakpoints 390,820,1440 --out ./public/bones
 
   Setup:
     1. Wrap your component:
@@ -292,7 +360,7 @@ function printHelp() {
          <BlogCard />
        </Skeleton>
 
-    2. Run: npx boneyard build
+    2. Run: npx boneyard-js build
 
     3. Import the registry once in your app entry:
        import './bones/registry'

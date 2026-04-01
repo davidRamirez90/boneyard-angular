@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@0xgf/boneyard": "^1.0.1",
+    "boneyard-js": "^1.0.1",
     "@codesandbox/sandpack-react": "^2.20.0",
     "@tailwindcss/postcss": "^4.2.2",
     "class-variance-authority": "^0.7.1",

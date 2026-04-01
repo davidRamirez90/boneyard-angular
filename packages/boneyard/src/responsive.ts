@@ -15,7 +15,7 @@ const DEFAULT_BREAKPOINTS = [0, 768, 1024]
  *
  * @example Browser dev tool / test:
  * ```ts
- * import { extractResponsive } from '@0xgf/boneyard'
+ * import { extractResponsive } from 'boneyard-js'
  *
  * // Render your component, then:
  * const el = document.querySelector('.blog-post')!

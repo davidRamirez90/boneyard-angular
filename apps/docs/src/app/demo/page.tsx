@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
-import { snapshotBones } from "@0xgf/boneyard";
-import { Skeleton } from "@0xgf/boneyard/react";
-import type { SkeletonResult, SnapshotConfig } from "@0xgf/boneyard";
+import { snapshotBones } from "boneyard-js";
+import { Skeleton } from "boneyard-js/react";
+import type { SkeletonResult, SnapshotConfig } from "boneyard-js";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 

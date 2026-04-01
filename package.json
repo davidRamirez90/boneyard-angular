@@ -2,6 +2,10 @@
   "name": "boneyard-monorepo",
   "private": true,
   "pnpm": {
-    "onlyBuiltDependencies": ["canvas", "sharp"]
-  }
+    "onlyBuiltDependencies": [
+      "canvas",
+      "sharp"
+    ]
+  },
+  "version": ""
 }

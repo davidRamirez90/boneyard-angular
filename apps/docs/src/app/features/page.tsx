@@ -88,7 +88,7 @@ export default function FeaturesPage() {
           </PropItem>
 
           <PropItem name="fixture" type="ReactNode">
-            <p>Mock content rendered during <code className="text-[12px] bg-stone-100 px-1 py-0.5 rounded">npx boneyard build</code> so the CLI can capture bone positions even when real data isn&apos;t available (e.g., behind authentication, user-specific data, or API-dependent content).</p>
+            <p>Mock content rendered during <code className="text-[12px] bg-stone-100 px-1 py-0.5 rounded">npx boneyard-js build</code> so the CLI can capture bone positions even when real data isn&apos;t available (e.g., behind authentication, user-specific data, or API-dependent content).</p>
             <p className="mt-2">Only rendered when the CLI is running — never used in production.</p>
             <div className="mt-2 rounded-lg bg-[#1a1a1a] p-3 font-mono text-[12px]">
               <span className="text-[#93c5fd]">fixture</span><span className="text-stone-300">={`{`}</span>{"\n"}
@@ -213,7 +213,7 @@ export default function FeaturesPage() {
           This is how you generate the bones JSON files. Run it with your dev server running:
         </p>
 
-        <CodeBlock language="bash" code="npx boneyard build" />
+        <CodeBlock language="bash" code="npx boneyard-js build" />
 
         <p className="text-[14px] text-[#78716c] leading-relaxed mt-4 mb-4">
           It opens a headless browser, visits your app, finds every <code className="text-[12px] bg-stone-100 px-1 py-0.5 rounded">&lt;Skeleton name=&quot;...&quot;&gt;</code>,
@@ -241,16 +241,16 @@ export default function FeaturesPage() {
         <div className="mt-6">
           <p className="text-[13px] font-semibold text-stone-700 mb-3">Examples</p>
           <CodeBlock language="bash" code={`<span class="text-stone-500"># Auto-detect server, default breakpoints</span>
-npx boneyard build
+npx boneyard-js build
 
 <span class="text-stone-500"># Specific page</span>
-npx boneyard build http://localhost:3000/dashboard
+npx boneyard-js build http://localhost:3000/dashboard
 
 <span class="text-stone-500"># Multiple pages at once</span>
-npx boneyard build http://localhost:3000 http://localhost:3000/profile
+npx boneyard-js build http://localhost:3000 http://localhost:3000/profile
 
 <span class="text-stone-500"># Custom breakpoints + output dir</span>
-npx boneyard build --breakpoints 390,820,1440 --out ./public/bones`} />
+npx boneyard-js build --breakpoints 390,820,1440 --out ./public/bones`} />
         </div>
 
         <div className="border-l-2 border-stone-300 pl-4 py-1 mt-4">

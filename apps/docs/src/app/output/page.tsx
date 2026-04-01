@@ -26,7 +26,7 @@ export default function OutputPage() {
           <span>Generated files</span>
         </div>
         <p className="text-[14px] text-[#78716c] leading-relaxed mt-4 mb-4">
-          Running <code className="text-[12px] bg-stone-100 px-1 py-0.5 rounded">npx boneyard build</code> creates
+          Running <code className="text-[12px] bg-stone-100 px-1 py-0.5 rounded">npx boneyard-js build</code> creates
           one <code className="text-[12px] bg-stone-100 px-1 py-0.5 rounded">.bones.json</code> file per
           named <code className="text-[12px] bg-stone-100 px-1 py-0.5 rounded">&lt;Skeleton&gt;</code> in your app:
         </p>

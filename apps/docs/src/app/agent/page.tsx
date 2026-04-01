@@ -11,13 +11,13 @@ Pixel-perfect skeleton loading screens, extracted directly from your real DOM. N
 ## How it works
 
 1. Wrap your component with \`<Skeleton>\` and give it a \`name\`
-2. Run \`npx boneyard build\` — it visits your app, snapshots the DOM, and writes \`.bones.json\` files + a \`registry.js\`
+2. Run \`npx boneyard-js build\` — it visits your app, snapshots the DOM, and writes \`.bones.json\` files + a \`registry.js\`
 3. Add \`import './bones/registry'\` once in your app entry — every Skeleton auto-resolves its bones by name
 
 ## Install
 
 \`\`\`
-npm install boneyard
+npm install boneyard-js
 \`\`\`
 
 ## Quick start
@@ -29,7 +29,7 @@ import './bones/registry'
 
 \`\`\`tsx
 // app/blog/page.tsx — no per-file JSON import needed
-import { Skeleton } from '@0xgf/boneyard/react'
+import { Skeleton } from 'boneyard-js/react'
 
 function BlogPage() {
   const { data, isLoading } = useFetch('/api/post')
@@ -46,14 +46,14 @@ function BlogPage() {
 With your dev server running:
 
 \`\`\`
-npx boneyard build
+npx boneyard-js build
 \`\`\`
 
 This opens a headless browser, visits your app at 375px, 768px, and 1280px, finds every \`<Skeleton name="...">\`, measures the layout, and saves \`.bones.json\` files + a \`registry.js\` to \`src/bones/\`.
 
 The registry calls \`registerBones()\` for each skeleton name so that \`<Skeleton name="x">\` auto-resolves without needing \`initialBones\`.
 
-Auto-detects your dev server by scanning common ports (3000, 5173, 4321, 8080…). Or pass a URL: \`npx boneyard build http://localhost:5173\`.
+Auto-detects your dev server by scanning common ports (3000, 5173, 4321, 8080…). Or pass a URL: \`npx boneyard-js build http://localhost:5173\`.
 
 Re-run it whenever your layout changes to regenerate.
 
@@ -92,10 +92,10 @@ Use \`snapshotConfig\` to hide elements from the skeleton:
 | leafTags | p, h1–h6, li, tr | Tags treated as one solid block |
 | captureRoundedBorders | true | Capture containers with border + border-radius as bones |
 
-### npx boneyard build options
+### npx boneyard-js build options
 
 \`\`\`
-npx boneyard build [url] [options]
+npx boneyard-js build [url] [options]
   --out <dir>          Output directory (default: ./src/bones)
   --breakpoints <bp>   Viewport widths, comma-separated (default: 375,768,1280)
   --wait <ms>          Extra wait after page load (default: 800)
@@ -110,15 +110,15 @@ Each bone is \`{ x, y, w, h, r, c? }\` — pixel offsets from the container's to
 ## Low-level API (non-React)
 
 \`\`\`ts
-import { snapshotBones } from '@0xgf/boneyard'
+import { snapshotBones } from 'boneyard-js'
 const result = snapshotBones(document.querySelector('.card'))
 
-import { renderBones } from '@0xgf/boneyard'
+import { renderBones } from 'boneyard-js'
 const html = renderBones(result, '#d4d4d4')
 container.innerHTML = html
 
 // Manual bone registration (what the generated registry.js does automatically)
-import { registerBones } from '@0xgf/boneyard'
+import { registerBones } from 'boneyard-js'
 registerBones('my-card', bonesJson)
 \`\`\`
 

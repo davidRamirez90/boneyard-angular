@@ -9,13 +9,13 @@ boneyard reads a rendered DOM element once, extracts a compact layout descriptor
 ## Install
 
 \`\`\`
-npm install boneyard
+npm install boneyard-js
 \`\`\`
 
 ## Quick start (React)
 
 \`\`\`tsx
-import { Skeleton } from '@0xgf/boneyard/react'
+import { Skeleton } from 'boneyard-js/react'
 
 const DEFAULT_POST = { title: 'Loading...', body: '...' }
 
@@ -47,7 +47,7 @@ For non-React or advanced usage, boneyard exposes three functions:
 ### 1. fromElement(el) — Extract
 
 \`\`\`ts
-import { fromElement } from '@0xgf/boneyard'
+import { fromElement } from 'boneyard-js'
 
 const descriptor = fromElement(document.querySelector('.card'))
 // → plain JSON SkeletonDescriptor, ~200 bytes for a card component
@@ -59,18 +59,18 @@ Walks the subtree and captures: display, flex direction, gap, padding, dimension
 ### 2. computeLayout(descriptor, width) — Compute
 
 \`\`\`ts
-import { computeLayout } from '@0xgf/boneyard/layout'
+import { computeLayout } from 'boneyard-js/layout'
 
 const skeleton = computeLayout(descriptor, 320)
 // → { name, viewportWidth, width, height, bones: Bone[] }
 \`\`\`
 
-Pure layout math — no DOM, no browser needed. Works in SSR, Web Workers, React Server Components, edge functions. Uses @chenglou/pretext for pixel-perfect text measurement at any width.
+Pure layout math — no DOM, no browser needed. Works in SSR, Web Workers, React Server Components, edge functions.
 
 ### 3. renderBones(skeleton) — Render
 
 \`\`\`ts
-import { renderBones } from '@0xgf/boneyard'
+import { renderBones } from 'boneyard-js'
 
 container.innerHTML = renderBones(skeleton)
 // Each bone → absolutely positioned div with shimmer animation
@@ -79,7 +79,7 @@ container.innerHTML = renderBones(skeleton)
 ### All-in-one shortcut
 
 \`\`\`ts
-import { skeleton } from '@0xgf/boneyard'
+import { skeleton } from 'boneyard-js'
 
 container.innerHTML = skeleton(element)
 // extract + compute + render in one call
@@ -133,9 +133,9 @@ interface Bone {
 
 - **Zero CLS**: Skeletons are computed from the same layout rules as real UI. Bones and real elements occupy identical positions.
 - **Extract once, use forever**: The descriptor is plain JSON. Save it, commit it, ship it.
-- **Responsive**: One descriptor produces correct skeletons at any width. Text wraps realistically via @chenglou/pretext.
+- **Responsive**: One descriptor produces correct skeletons at any width.
 - **No DOM at runtime**: The layout engine is pure math. No document, no window, no canvas.
-- **Tiny footprint**: Under 300 lines of TypeScript. Single dependency (@chenglou/pretext).
+- **Tiny footprint**: Under 300 lines of TypeScript.
 
 ## Example descriptor
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
-import { snapshotBones } from "@0xgf/boneyard";
-import type { Bone, SkeletonResult, ResponsiveBones, SnapshotConfig } from "@0xgf/boneyard";
+import { snapshotBones } from "boneyard-js";
+import type { Bone, SkeletonResult, ResponsiveBones, SnapshotConfig } from "boneyard-js";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import playgroundBones from "@/bones/playground.bones.json";
@@ -303,7 +303,7 @@ function AppUI({ narrow, contentRef, skeletonOverlay }: { narrow: boolean; conte
 const TEMPLATES = {
   "blog-card": {
     label: "Blog Card",
-    code: `import { Skeleton } from '@0xgf/boneyard/react'
+    code: `import { Skeleton } from 'boneyard-js/react'
 import { useState, useEffect } from 'react'
 
 function BlogCard({ data }) {
@@ -367,7 +367,7 @@ export default function App() {
   },
   dashboard: {
     label: "Dashboard",
-    code: `import { Skeleton } from '@0xgf/boneyard/react'
+    code: `import { Skeleton } from 'boneyard-js/react'
 import { useState, useEffect } from 'react'
 
 function Dashboard({ data }) {
@@ -438,7 +438,7 @@ export default function App() {
   },
   "e-commerce": {
     label: "Product Grid",
-    code: `import { Skeleton } from '@0xgf/boneyard/react'
+    code: `import { Skeleton } from 'boneyard-js/react'
 import { useState, useEffect } from 'react'
 
 function ProductGrid({ products }) {
@@ -836,7 +836,7 @@ export default function PlaygroundPage() {
             }}
             customSetup={{
               dependencies: {
-                "@0xgf/boneyard": "latest",
+                "boneyard-js": "latest",
                 react: "^19.0.0",
                 "react-dom": "^19.0.0",
               },

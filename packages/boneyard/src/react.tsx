@@ -8,7 +8,7 @@ const bonesRegistry = new Map<string, SkeletonResult | ResponsiveBones>()
 /**
  * Register pre-generated bones so `<Skeleton name="...">` can auto-resolve them.
  *
- * Called by the generated `registry.js` file (created by `npx boneyard build`).
+ * Called by the generated `registry.js` file (created by `npx boneyard-js build`).
  * Import it once in your app entry point:
  *
  * ```ts
@@ -55,7 +55,7 @@ export interface SkeletonProps {
   /** Your component — rendered when not loading. */
   children: ReactNode
   /**
-   * Name this skeleton. Used by `npx boneyard build` to identify and capture bones.
+   * Name this skeleton. Used by `npx boneyard-js build` to identify and capture bones.
    * Also used to auto-resolve pre-generated bones from the registry.
    */
   name?: string
@@ -74,13 +74,13 @@ export interface SkeletonProps {
    */
   fallback?: ReactNode
   /**
-   * Mock content rendered during `npx boneyard build` so the CLI can capture
+   * Mock content rendered during `npx boneyard-js build` so the CLI can capture
    * bone positions even when real data isn't available.
    * Only rendered when the CLI sets `window.__BONEYARD_BUILD = true`.
    */
   fixture?: ReactNode
   /**
-   * Controls how `npx boneyard build` extracts bones from the fixture.
+   * Controls how `npx boneyard-js build` extracts bones from the fixture.
    * Stored as a data attribute — the CLI reads it during capture.
    */
   snapshotConfig?: SnapshotConfig
@@ -89,7 +89,7 @@ export interface SkeletonProps {
 /**
  * Wrap any component to get automatic skeleton loading screens.
  *
- * 1. Run `npx boneyard build` — captures bone positions from your rendered UI
+ * 1. Run `npx boneyard-js build` — captures bone positions from your rendered UI
  * 2. Import the generated registry in your app entry
  * 3. `<Skeleton name="..." loading={isLoading}>` auto-resolves bones by name
  */
