@@ -1,3 +1,4 @@
 {
-  "installCommand": "corepack enable && pnpm install"
+  "installCommand": "npm i -g pnpm@10.14.0 && pnpm install",
+  "buildCommand": "pnpm --filter boneyard-js build && pnpm --filter boneyard-docs build"
 }
